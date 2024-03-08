@@ -1,0 +1,71 @@
+cache:
+  paths:
+    - node_modules/
+
+image: node:10.15.0
+
+services: 
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
+variables:
+  SERVER_DEV: ${SERVER_DEV}
+  SERVER_PROD: ${SERVER_PROD}
+  BACKEND_URL_DEV: ${BACKEND_URL_DEV}
+  BACKEND_URL_PROD: ${BACKEND_URL_PROD}
+  CONTAINER_IMAGE: quangbui2412/youtube-fe
+
+.build:
+  image: docker:latest
+  script: |
+    echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+    docker build -t ${CONTAINER_IMAGE}:${APP_ENV} --build-arg BACKEND_URL=$BACKEND_URL .
+    docker tag ${CONTAINER_IMAGE}:${APP_ENV} ${CONTAINER_IMAGE}:${APP_ENV}
+    docker push ${CONTAINER_IMAGE}:${APP_ENV}
+  artifacts:
+    paths:
+      - ./build
+
+build_dev:
+  extends: .build
+  stage: build
+  before_script:
+    - export BACKEND_URL=${BACKEND_URL_DEV} APP_ENV="dev"
+  only:
+    refs:
+      - develop
+
+build_prod:
+  extends: .build
+  stage: build
+  before_script:
+    - export BACKEND_URL=${BACKEND_URL_PROD} APP_ENV="prod"
+  only:
+    refs:
+      - master
+
+.deploy:
+  script: 
+    - bash scripts/deploy.sh $SERVER ${CONTAINER_IMAGE}:${APP_ENV}
+    
+deploy_dev:
+  extends: .deploy
+  stage: deploy
+  before_script:
+    - export SERVER=${SERVER_DEV} APP_ENV="dev"
+  only:
+    refs:
+      - develop
+
+deploy_prod:
+  extends: .deploy
+  stage: deploy
+  before_script:
+    - export SERVER=${SERVER_PROD} APP_ENV="prod"
+  only:
+    refs:
+      - master
+

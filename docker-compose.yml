@@ -1,0 +1,11 @@
+version: '2.0'
+
+services:
+  client:
+    container_name: client
+    image: quangbui2412/youtube-fe-dev:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/app
+      - /app/node_modules
