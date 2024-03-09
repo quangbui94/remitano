@@ -5,12 +5,14 @@ interface IAuthContext {
   auth: boolean;
   login(item: IRequestBody): Promise<any>;
   logout(): void;
+  email: string;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,14 +24,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (item: IRequestBody): Promise<any> => {
     const auth = new AuthRequest();
-    console.log(process.env.REACT_APP_BACKEND_URL);
     try {
       const {
-        data: { token },
+        data: { token, email },
       } = await auth.login(item);
       if (token) {
         localStorage.setItem("token", token);
         setAuth(true);
+        setEmail(email);
       }
     } catch (error) {
       console.log(error);
@@ -43,7 +45,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ auth, login, logout, email }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,9 +8,9 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
+import { useHistory, Link } from 'react-router-dom';
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import { ChangeEvent, useContext, useState } from "react";
-import { AuthRequest } from "../../api/AuthRequest";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const BoxWrapper = styled("div")(({ theme }) => ({
@@ -41,7 +41,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavigationBar = () => {
-  const { auth, login, logout } = useContext(AuthContext);
+  // const history = useHistory();
+  const { auth, login, logout, email: authedEmail } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -53,7 +54,7 @@ const NavigationBar = () => {
     setPassword(e.target.value);
   };
 
-  const clickHandler = async () => {
+  const onLoginHandler = async () => {
     try {
       (await auth) ? logout() : login({ email, password });
       setEmail("");
@@ -62,6 +63,10 @@ const NavigationBar = () => {
       console.log(error);
     }
   };
+
+  const onShareHandler = () => {
+    history.push("/share");
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -83,24 +88,38 @@ const NavigationBar = () => {
           >
             Movies
           </Typography>
+          {
+            auth ? (
+              <>
+                <Typography>Welcome user {authedEmail}</Typography>
+                <Link to="/share">
+                  {/* <Button color="info" variant="contained" onClick={onShareHandler}> */}
+                    Share videos
+                  {/* </Button> */}
+                </Link>
+              </>
+            ): (
+            <>
+              <BoxWrapper>
+                <StyledInputBase
+                  value={email}
+                  onChange={handleChangeEmail}
+                  placeholder="Email"
+                  inputProps={{ "aria-label": "email" }}
+                />
+              </BoxWrapper>
+              <BoxWrapper>
+                <StyledInputBase
+                  value={password}
+                  onChange={handleChangePassword}
+                  placeholder="Password"
+                  inputProps={{ "aria-label": "passwordd" }}
+                />
+              </BoxWrapper>
+            </>
+          )}
           <BoxWrapper>
-            <StyledInputBase
-              value={email}
-              onChange={handleChangeEmail}
-              placeholder="Email"
-              inputProps={{ "aria-label": "email" }}
-            />
-          </BoxWrapper>
-          <BoxWrapper>
-            <StyledInputBase
-              value={password}
-              onChange={handleChangePassword}
-              placeholder="Password"
-              inputProps={{ "aria-label": "passwordd" }}
-            />
-          </BoxWrapper>
-          <BoxWrapper>
-            <Button color="info" variant="contained" onClick={clickHandler}>
+            <Button color="info" variant="contained" onClick={onLoginHandler}>
               {auth ? "Logout" : "Login/Register"}
             </Button>
           </BoxWrapper>

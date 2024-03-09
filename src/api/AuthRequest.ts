@@ -4,6 +4,7 @@ import { AuthConfig } from "../config/axios";
 
 interface IAuthResponse {
   token: string;
+  email: string;
   refreshToken?: string;
 }
 
