@@ -1,14 +1,11 @@
+import { Outlet } from "react-router-dom";
 import NavigationBar from "../NavigationBar/NavigationBar";
 
-interface ILayout {
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<ILayout> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <div>
       <NavigationBar />
-      {children}
+      <Outlet />
     </div>
   );
 };

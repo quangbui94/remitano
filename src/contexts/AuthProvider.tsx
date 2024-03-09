@@ -12,13 +12,17 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
 
     if (token) {
       setAuth(true);
+    }
+    if (email) {
+      setEmail(email);
     }
   }, []);
 
@@ -30,6 +34,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       } = await auth.login(item);
       if (token) {
         localStorage.setItem("token", token);
+        localStorage.setItem("email", email);
         setAuth(true);
         setEmail(email);
       }
@@ -41,6 +46,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
     setAuth(false);
   };
 

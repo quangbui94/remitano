@@ -8,7 +8,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
@@ -41,7 +41,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const NavigationBar = () => {
-  // const history = useHistory();
+  const navigate = useNavigate();
   const { auth, login, logout, email: authedEmail } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -65,8 +65,8 @@ const NavigationBar = () => {
   };
 
   const onShareHandler = () => {
-    history.push("/share");
-  }
+    navigate("/share");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -88,17 +88,19 @@ const NavigationBar = () => {
           >
             Movies
           </Typography>
-          {
-            auth ? (
-              <>
-                <Typography>Welcome user {authedEmail}</Typography>
-                <Link to="/share">
-                  {/* <Button color="info" variant="contained" onClick={onShareHandler}> */}
-                    Share videos
-                  {/* </Button> */}
-                </Link>
-              </>
-            ): (
+          {auth ? (
+            <>
+              <Typography>Welcome user {authedEmail}</Typography>
+              <Button
+                sx={{ ml: 2 }}
+                color="info"
+                variant="contained"
+                onClick={onShareHandler}
+              >
+                Share videos
+              </Button>
+            </>
+          ) : (
             <>
               <BoxWrapper>
                 <StyledInputBase
