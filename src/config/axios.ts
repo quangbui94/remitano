@@ -1,4 +1,4 @@
-import { Axios, AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 
 export const AuthConfig: AxiosRequestConfig = {
   baseURL: process.env.REACT_APP_BACKEND_URL,

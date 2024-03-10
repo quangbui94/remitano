@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { Snackbar } from "@mui/material";
+import { Snackbar, Box } from "@mui/material";
 
 import NavigationBar from "components/NavigationBar/NavigationBar";
 import { useSocket } from "contexts/SocketIOProvider";
@@ -33,7 +33,7 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <div>
+    <Box>
       <NavigationBar />
       <Snackbar
         open={notificationOpen}
@@ -42,7 +42,7 @@ const Layout: React.FC = () => {
         message={notificationMessage}
       />
       <Outlet />
-    </div>
+    </Box>
   );
 };
 

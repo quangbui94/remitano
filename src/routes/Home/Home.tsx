@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import VideoCard from "components/VideoCard/VideoCard";
 import { VideoRequest, IVideoResponse } from "api/VideoRequest";
+import { Box } from "@mui/material";
 
 const Home = () => {
   const [videoCollection, setVideoCollection] = useState<IVideoResponse[]>([]);
@@ -15,7 +16,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div style={{ padding: "100px 350px" }}>
+    <Box style={{ padding: "100px 350px" }}>
       {videoCollection.map((video, i) => (
         <VideoCard
           key={i}
@@ -25,7 +26,7 @@ const Home = () => {
           description={video.description}
         />
       ))}
-    </div>
+    </Box>
   );
 };
 

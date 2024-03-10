@@ -22,7 +22,10 @@ export const useSocket = (): SocketContextType => {
 export const SocketProvider: React.FC<SocketProviderChildren> = ({
   children,
 }) => {
-  const socket = io("http://localhost:5000", { transports: ["websocket"] });
+  const socket = io(
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:5000",
+    { transports: ["websocket"] }
+  );
 
   return (
     <SocketContext.Provider value={{ socket }}>
