@@ -15,10 +15,6 @@ const ShareLinkBox = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    socket.emit("connection", { message: "Connected" });
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const embedId = getVideoIdFromUrl(link);
@@ -36,6 +32,10 @@ const ShareLinkBox = () => {
       if (result.data.id) {
         setNotificationOpen(true);
         setLink("");
+        socket.emit("shareVideo", {
+          title: result.data.title,
+          email,
+        });
         return;
       }
     } catch (error: any) {
