@@ -16,7 +16,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Box style={{ padding: "100px 350px" }}>
+    <Box data-testid="home" style={{ padding: "100px 350px" }}>
       {videoCollection.map((video, i) => (
         <VideoCard
           key={i}

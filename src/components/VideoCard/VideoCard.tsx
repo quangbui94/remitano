@@ -16,7 +16,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
   description,
 }) => {
   return (
-    <Card sx={{ display: "flex", mb: 5 }}>
+    <Card sx={{ display: "flex", mb: 5 }} data-testid="video-card">
       <CardMedia
         component="iframe"
         src={`https://www.youtube.com/embed/${embedId}`}

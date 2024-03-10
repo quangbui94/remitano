@@ -33,7 +33,7 @@ const Layout: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box data-testid="layout">
       <NavigationBar />
       <Snackbar
         open={notificationOpen}

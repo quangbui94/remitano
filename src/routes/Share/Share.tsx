@@ -25,7 +25,6 @@ const ShareLinkBox = () => {
       setErrorMessage("Please enter a valid YouTube URL");
       return;
     }
-
     //Call post request to share video
     try {
       const result = await new VideoRequest().shareVideo({ email, embedId });
@@ -39,6 +38,7 @@ const ShareLinkBox = () => {
         return;
       }
     } catch (error: any) {
+      console.log("failed");
       if (!error.response.data.success) {
         setError(true);
         setErrorMessage(error.response.data.message);
@@ -62,6 +62,7 @@ const ShareLinkBox = () => {
 
   return (
     <Box
+      data-testid="share"
       sx={{
         border: "1px solid #ccc",
         padding: "20px 50px",
