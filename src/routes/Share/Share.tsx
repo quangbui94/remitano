@@ -1,17 +1,23 @@
 import { Box, TextField, Button, Snackbar, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VideoRequest } from "../../api/VideoRequest";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { getVideoIdFromUrl } from "../../utils";
+import { useSocket } from "../../contexts/SocketIOProvider";
 
 const ShareLinkBox = () => {
-  const { email } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { email } = useContext(AuthContext);
+  const { socket } = useSocket();
   const [link, setLink] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    socket.emit("connection", { message: "Connected" });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,7 +66,7 @@ const ShareLinkBox = () => {
         border: "1px solid #ccc",
         padding: "20px 50px",
         borderRadius: "5px",
-        width: "600px",
+        width: "400px",
         margin: "100px auto",
       }}
     >
@@ -78,18 +84,18 @@ const ShareLinkBox = () => {
             helperText={error && errorMessage}
             onChange={onChangeHandler}
           />
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex" }}>
             <Button
               variant="contained"
               type="submit"
-              sx={{ marginTop: "10px", width: "47%" }}
+              sx={{ marginTop: "10px", width: "70px", marginRight: "10px" }}
             >
               Share
             </Button>
             <Button
               variant="contained"
               type="button"
-              sx={{ marginTop: "10px", width: "49%" }}
+              sx={{ marginTop: "10px", width: "70px" }}
               onClick={onBackHandler}
             >
               Back
