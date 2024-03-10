@@ -25,4 +25,4 @@ const getVideoIdFromUrl = (str: string): string => {
   return video_id;
 };
 
-export { trimArray, getVideoIdFromUrl };
+export { trimArray, getVideoIdFromUrl, isValidYoutubeUrl };
