@@ -1,6 +1,6 @@
-import { APIResponse, transform } from "./BaseRequest";
-import { HTTPClient } from "./HttpClient";
-import { VideoConfig } from "../config/axios";
+import { APIResponse, transform } from "api/BaseRequest";
+import { HTTPClient } from "api/HttpClient";
+import { VideoConfig } from "config/axios";
 
 export interface IVideoResponse {
   id: string;

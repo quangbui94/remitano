@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import NavigationBar from "../NavigationBar/NavigationBar";
 import { Snackbar } from "@mui/material";
-import { useSocket } from "../../contexts/SocketIOProvider";
-import { trimArray } from "../../utils";
+
+import NavigationBar from "components/NavigationBar/NavigationBar";
+import { useSocket } from "contexts/SocketIOProvider";
+import { trimArray } from "utils";
 
 interface IMessage {
   message: string;

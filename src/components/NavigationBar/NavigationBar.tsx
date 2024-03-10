@@ -8,10 +8,11 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthProvider";
+
+import { AuthContext } from "contexts/AuthProvider";
 
 const BoxWrapper = styled("div")(({ theme }) => ({
   position: "relative",

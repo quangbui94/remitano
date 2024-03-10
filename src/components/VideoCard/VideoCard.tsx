@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { trimArray } from "../../utils";
+import { trimArray } from "utils";
 
 interface VideoCardProps {
   embedId: string;

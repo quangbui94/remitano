@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { HTTPClient } from "./HttpClient";
+import { HTTPClient } from "api/HttpClient";
 
 export interface APIResponse<T> {
   data: T;

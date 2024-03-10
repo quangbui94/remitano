@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import App from "App";
+import reportWebVitals from "reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import AuthProvider from "./contexts/AuthProvider";
-import { SocketProvider } from "./contexts/SocketIOProvider";
+import AuthProvider from "contexts/AuthProvider";
+import { SocketProvider } from "contexts/SocketIOProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

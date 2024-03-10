@@ -1,6 +1,6 @@
-import { APIResponse, transform } from "./BaseRequest";
-import { HTTPClient } from "./HttpClient";
-import { AuthConfig } from "../config/axios";
+import { APIResponse, transform } from "api/BaseRequest";
+import { HTTPClient } from "api/HttpClient";
+import { AuthConfig } from "config/axios";
 
 interface IAuthResponse {
   token: string;

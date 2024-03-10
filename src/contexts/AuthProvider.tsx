@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { AuthRequest, IRequestBody } from "../api/AuthRequest";
+import { AuthRequest, IRequestBody } from "api/AuthRequest";
 
 interface IAuthContext {
   auth: boolean;

@@ -4,7 +4,7 @@ import axios, {
   AxiosRequestHeaders,
   AxiosRequestConfig,
 } from "axios";
-import { BaseConfig } from "../config/axios";
+import { BaseConfig } from "config/axios";
 
 export abstract class HTTPClient {
   protected instance: AxiosInstance;

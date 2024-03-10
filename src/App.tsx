@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout/Layout";
-import Home from "./routes/Home/Home";
-import Share from "./routes/Share/Share";
+import Layout from "components/Layout/Layout";
+import Home from "routes/Home/Home";
+import Share from "routes/Share/Share";
 
 const App = () => {
   return (

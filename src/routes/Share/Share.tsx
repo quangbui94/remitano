@@ -1,10 +1,10 @@
 import { Box, TextField, Button, Snackbar, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { VideoRequest } from "../../api/VideoRequest";
-import { AuthContext } from "../../contexts/AuthProvider";
-import { getVideoIdFromUrl } from "../../utils";
-import { useSocket } from "../../contexts/SocketIOProvider";
+import { VideoRequest } from "api/VideoRequest";
+import { AuthContext } from "contexts/AuthProvider";
+import { getVideoIdFromUrl } from "utils";
+import { useSocket } from "contexts/SocketIOProvider";
 
 const ShareLinkBox = () => {
   const navigate = useNavigate();
