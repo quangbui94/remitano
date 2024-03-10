@@ -1,11 +1,13 @@
-import { Box, TextField, Button, Snackbar } from "@mui/material";
+import { Box, TextField, Button, Snackbar, Typography } from "@mui/material";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { VideoRequest } from "../../api/VideoRequest";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { getVideoIdFromUrl } from "../../utils";
 
 const ShareLinkBox = () => {
   const { email } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [link, setLink] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -48,16 +50,23 @@ const ShareLinkBox = () => {
     setNotificationOpen(false);
   };
 
+  const onBackHandler = () => {
+    navigate("/");
+  };
+
   return (
     <Box
       sx={{
         border: "1px solid #ccc",
-        padding: "20px",
+        padding: "20px 50px",
         borderRadius: "5px",
-        width: "300px",
+        width: "600px",
         margin: "100px auto",
       }}
     >
+      <Typography gutterBottom variant="h5" component="h4">
+        Share your awesome videos here
+      </Typography>
       <form onSubmit={handleSubmit}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <TextField
@@ -69,13 +78,23 @@ const ShareLinkBox = () => {
             helperText={error && errorMessage}
             onChange={onChangeHandler}
           />
-          <Button
-            variant="contained"
-            type="submit"
-            sx={{ marginTop: "10px", width: "100%" }}
-          >
-            Share
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ marginTop: "10px", width: "47%" }}
+            >
+              Share
+            </Button>
+            <Button
+              variant="contained"
+              type="button"
+              sx={{ marginTop: "10px", width: "49%" }}
+              onClick={onBackHandler}
+            >
+              Back
+            </Button>
+          </Box>
           <Snackbar
             open={notificationOpen}
             autoHideDuration={5000}
