@@ -21,7 +21,7 @@ export const transform = (
   return new Promise((resolve, reject) => {
     const result: APIResponse<any> = {
       data: response.data,
-      succeeded: response["succeeded"],
+      succeeded: response.data["success"],
       errors: response.data.errors,
     };
     resolve(result);
