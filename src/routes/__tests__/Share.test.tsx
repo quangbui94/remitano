@@ -13,15 +13,6 @@ jest.mock("react-router-dom", () => ({
   useNavigate: jest.fn(),
 }));
 
-class CustomError extends Error {
-  code: number;
-
-  constructor(message: string, code: number) {
-    super(message);
-    this.code = code;
-  }
-}
-
 describe("Share Component", () => {
   afterEach(() => {
     jest.clearAllMocks(); // Clear mock calls after each test

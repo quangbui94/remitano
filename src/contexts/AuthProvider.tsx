@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { AuthRequest, IRequestBody } from "api/AuthRequest";
 
-interface IAuthContext {
+export interface IAuthContext {
   auth: boolean;
   login(item: IRequestBody): Promise<any>;
   logout(): void;
@@ -27,6 +27,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (item: IRequestBody): Promise<any> => {
+    console.log("hi");
     const auth = new AuthRequest();
     try {
       const {

@@ -36,6 +36,7 @@ const Layout: React.FC = () => {
     <Box data-testid="layout">
       <NavigationBar />
       <Snackbar
+        data-testid="notification-close-button"
         open={notificationOpen}
         autoHideDuration={5000}
         onClose={handleNotificationClose}

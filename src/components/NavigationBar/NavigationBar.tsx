@@ -57,6 +57,7 @@ const NavigationBar = () => {
 
   const onLoginHandler = async () => {
     try {
+      console.log(auth);
       auth ? logout() : login({ email, password });
       setEmail("");
       setPassword("");

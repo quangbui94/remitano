@@ -38,6 +38,15 @@
   "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "test-config",
+      "interfaces",
+      "reportWebVitals.ts",
+      "src/index.tsx",
+      ".module.ts",
+      ".mock.ts"
     ]
   },
   "eslintConfig": {
