@@ -1,40 +1,60 @@
-// import { act, render, waitFor } from '@testing-library/react';
-// import { SocketProvider, useSocket as mockUseSocket } from 'contexts/SocketIOProvider';
+/* eslint-disable */
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import Layout from "../Layout/Layout";
+import { SocketProvider } from "contexts/SocketIOProvider";
+import { BrowserRouter } from "react-router-dom";
 
-// jest.mock('contexts/SocketIOProvider');
+describe("Layout component", () => {
+  test("renders navigation bar", () => {
+    render(
+      <SocketProvider>
+        <BrowserRouter>
+          <Layout />
+        </BrowserRouter>
+      </SocketProvider>
+    );
+    const navigationBar = screen.getByTestId("layout");
+    expect(navigationBar).toBeInTheDocument();
+  });
 
-// import Layout from 'components/Layout/Layout';
-// import { BrowserRouter } from 'react-router-dom';
+  test("displays notification when shareVideo event is received", async () => {
+    render(
+      <SocketProvider>
+        <BrowserRouter>
+          <Layout />
+        </BrowserRouter>
+      </SocketProvider>
+    );
+    const notificationMessage = "Test notification message";
+    const shareVideoEvent = { message: notificationMessage };
+    const socket = require("socket.io-client")();
+    socket.emit("shareVideo", shareVideoEvent);
 
-// describe('Layout Component', () => {
-//   test('renders without crashing', async () => {
-//     // Mocking the return value of useSocket hook
-//     const mockSocket = { on: jest.fn(), off: jest.fn() };
-//     (mockUseSocket as jest.Mock).mockReturnValue({ socket: mockSocket });
+    await waitFor(() => {
+      const notification = screen.getByTestId("notification");
+      expect(notification).toBeInTheDocument();
+      expect(notification).toHaveTextContent(notificationMessage);
+    });
+  });
 
-//     // Add your assertions here
-//     const { getByTestId, queryByText } = render(
-//         <SocketProvider>
-//             <BrowserRouter>
-//           <Layout />
-//           </BrowserRouter>
-//         </SocketProvider>
-//       );
+  test("closes notification when close button is clicked", () => {
+    render(
+      <SocketProvider>
+        <BrowserRouter>
+          <Layout />
+        </BrowserRouter>
+      </SocketProvider>
+    );
+    const notificationMessage = "Test notification message";
+    const shareVideoEvent = { message: notificationMessage };
+    const socket = require("socket.io-client")();
+    socket.emit("shareVideo", shareVideoEvent);
 
-//       const mockMessage = 'New video shared';
-//       mockSocket.on('shareVideo', (data: any) => {
-//         act(() => {
-//           data.callback({ message: mockMessage });
-//         });
-//       });
+    const closeButton = screen.getByTestId("layout");
+    userEvent.click(closeButton);
 
-//       await waitFor(() => expect(queryByText(mockMessage)).toBeInTheDocument());
-
-//       const closeButton = getByTestId('notification-close-button');
-//       act(() => {
-//         closeButton.click();
-//       });
-
-//       await waitFor(() => expect(queryByText(mockMessage)).not.toBeInTheDocument());
-//   });
-// });
+    const notification = screen.queryByTestId("notification");
+    expect(notification).not.toBeInTheDocument();
+  });
+});

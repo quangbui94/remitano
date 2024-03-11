@@ -135,4 +135,90 @@ describe("Share Component", () => {
     // Check that the navigate function is called with the expected route
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
+
+  test("handles error when sharing video", async () => {
+    // Mock useContext to return a mocked context value
+    const mockContextValue = {
+      email: "test@example.com",
+      auth: true,
+      login: jest.fn(),
+      logout: jest.fn(),
+    };
+
+    // Mock the implementation of shareVideo method to throw an error
+    const mockShareVideo = jest.fn().mockRejectedValueOnce({
+      response: {
+        data: {
+          success: false,
+          message: "Failed to share video",
+        },
+      },
+    });
+    VideoRequest.prototype.shareVideo = mockShareVideo;
+
+    // Render the Share component
+    const { getByLabelText, getByText } = render(
+      <SocketProvider>
+        <BrowserRouter>
+          <AuthContext.Provider value={mockContextValue}>
+            <Share />
+          </AuthContext.Provider>
+        </BrowserRouter>
+      </SocketProvider>
+    );
+
+    // Fill and submit the form
+    fireEvent.change(getByLabelText("YouTube URL"), {
+      target: { value: "https://www.youtube.com/watch?v=abcd1234567" },
+    });
+    fireEvent.click(getByText("Share"));
+
+    // Wait for the form submission and error notification
+    await waitFor(() => {
+      // Check if shareVideo method is called with correct arguments
+      expect(mockShareVideo).toHaveBeenCalledWith({
+        email: mockContextValue.email,
+        embedId: "abcd1234567",
+      });
+
+      // Check if error notification is displayed
+      expect(getByText("Failed to share video")).toBeInTheDocument();
+    });
+  });
 });
+
+// test("closes notification when handleNotificationClose is called", async () => {
+//   const mockContextValue = {
+//     email: "test@example.com",
+//     auth: true,
+//     login: jest.fn(),
+//     logout: jest.fn(),
+//   };
+//   // Render the Share component
+//   const { getByLabelText, getByText, queryByText } = render(
+//     <SocketProvider>
+//       <BrowserRouter>
+//         <AuthContext.Provider value={mockContextValue}>
+//           <Share />
+//         </AuthContext.Provider>
+//       </BrowserRouter>
+//     </SocketProvider>
+//   );
+
+//   // Set notificationOpen to true
+//   fireEvent.change(getByLabelText("YouTube URL"), {
+//     target: { value: "https://www.youtube.com/watch?v=abcd1234567" },
+//   });
+//   fireEvent.click(getByText("Share"));
+
+//   // Check if notification is initially open
+//   await waitFor(() => {
+//     expect(getByText("Video shared Successful!")).toBeInTheDocument();
+//   })
+
+//   // Call handleNotificationClose
+//   // handleNotificationClose();
+
+//   // Check if notification is closed
+//   // expect(queryByText("Video shared Successful!")).toBeNull();
+// });

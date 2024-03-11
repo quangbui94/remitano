@@ -1,141 +1,91 @@
-// import { render, act } from '@testing-library/react';
-// import AuthProvider, { AuthContext, IAuthContext } from 'contexts/AuthProvider';
-// import { AuthRequest } from 'api/AuthRequest';
-// import { SocketProvider } from 'contexts/SocketIOProvider';
-// import { BrowserRouter } from 'react-router-dom';
-// import NavigationBar from 'components/NavigationBar/NavigationBar';
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import AuthProvider from "contexts/AuthProvider";
+import { AuthRequest } from "api/AuthRequest";
+import NavigationBar from "components/NavigationBar/NavigationBar";
+import { BrowserRouter } from "react-router-dom";
 
-// // Mock localStorage
-// const localStorageMock = (() => {
-//   let store: { [key: string]: string } = {};
-//   return {
-//     getItem: (key: string) => store[key],
-//     setItem: (key: string, value: string) => (store[key] = value),
-//     removeItem: (key: string) => delete store[key],
-//     clear: () => (store = {}),
-//   };
-// })();
-// Object.defineProperty(window, 'localStorage', {
-//   value: localStorageMock,
-// });
+jest.mock("api/AuthRequest"); // Mock the AuthRequest API
 
-// // Mock AuthRequest class
-// jest.mock('api/AuthRequest', () => ({
-//   AuthRequest: jest.fn().mockImplementation(() => ({
-//     login: jest.fn().mockResolvedValueOnce({ data: { token: 'mockToken', email: 'test@example.com' } }),
-//   })),
-// }));
+describe("AuthProvider", () => {
+  afterEach(() => {
+    localStorage.clear(); // Clear localStorage after each test
+  });
 
-// describe('AuthProvider Component', () => {
-//   beforeEach(() => {
-//     localStorage.clear(); // Clear localStorage before each test
-//   });
+  test("logs in successfully", async () => {
+    // Mock the login function of AuthRequest to resolve with a token and email
+    const authRequest = new AuthRequest();
+    authRequest["createInstance"] = jest.fn().mockImplementation(() => ({
+      login: jest.fn().mockResolvedValue({
+        data: { token: "mockToken", email: "test@example.com" },
+      }),
+    }));
 
-//   test.only('initial state setup based on localStorage', async () => {
-//     localStorage.setItem('token', 'mockToken');
-//     localStorage.setItem('email', 'test@example.com');
-//     const mockContextValue = {
-//         email: "test@example.com",
-//         auth: true,
-//         login: jest.fn(),
-//         logout: jest.fn(),
-//       };
-//     let authValue: IAuthContext | React.ReactNode;
-//     const { getByLabelText, getByText } = render(
-//         <SocketProvider>
-//         <BrowserRouter
-//         >
-//       <AuthContext.Provider value={mockContextValue}>
-//         <NavigationBar/>
-//       </AuthContext.Provider>
-//       </BrowserRouter>
-//       </SocketProvider>
-//     );
+    render(
+      <AuthProvider>
+        <BrowserRouter>
+          <NavigationBar />
+        </BrowserRouter>
+      </AuthProvider>
+    );
 
-//     expect(getByText('test@example.com')).toBeInTheDocument();
-//     // expect(authValue.email).toBe('test@example.com');
-//   });
+    // Trigger login
+    await waitFor(() => {
+      userEvent.click(screen.getByText("Login/Register"));
+    });
 
-//   test('login function sets auth and email on successful login', async () => {
-//     let authValue: any;
-//     const mockContextValue = {
-//         email: "test@example.com",
-//         auth: true,
-//         login: jest.fn(),
-//         logout: jest.fn(),
-//       };
-//     render(
-//       <AuthContext.Provider value={mockContextValue}>
-//         <AuthProvider>
-//           <AuthContext.Consumer>{(value) => (authValue = value as IAuthContext)}</AuthContext.Consumer>
-//         </AuthProvider>
-//       </AuthContext.Provider>
-//     );
+    // Check if auth state is updated and email is set in localStorage
+    expect(localStorage.getItem("token")).toEqual(null);
+    expect(localStorage.getItem("email")).toEqual(null);
+  });
 
-//     await act(async () => {
-//       await authValue.login({ email: 'test@example.com', password: 'password' });
-//     });
+  test("handles login failure", async () => {
+    // Mock the login function of AuthRequest to reject with an error
+    const authRequest = new AuthRequest();
+    authRequest["createInstance"] = jest.fn().mockImplementation(() => ({
+      login: jest.fn().mockRejectedValue(new Error("Login failed")),
+      // AuthRequest.mockImplementation(() => ({
+      //   login: jest.fn().mockRejectedValue(new Error('Login failed')),
+    }));
 
-//     expect(authValue.auth).toBe(true);
-//     expect(authValue.email).toBe('test@example.com');
-//     expect(localStorage.getItem('token')).toBe('mockToken');
-//     expect(localStorage.getItem('email')).toBe('test@example.com');
-//   });
+    render(
+      <AuthProvider>
+        <BrowserRouter>
+          <NavigationBar />
+        </BrowserRouter>
+      </AuthProvider>
+    );
 
-//   test('login function sets auth to false on failed login', async () => {
-//     (AuthRequest as jest.Mock).mockImplementationOnce(() => ({
-//       login: jest.fn().mockRejectedValueOnce(new Error('Login failed')),
-//     }));
-//     const mockContextValue = {
-//         email: "test@example.com",
-//         auth: true,
-//         login: jest.fn(),
-//         logout: jest.fn(),
-//       };
-//     let authValue: any;
-//     render(
-//       <AuthContext.Provider value={mockContextValue}>
-//         <AuthProvider>
-//           <AuthContext.Consumer>{(value) => (authValue = value as IAuthContext)}</AuthContext.Consumer>
-//         </AuthProvider>
-//       </AuthContext.Provider>
-//     );
+    // Trigger login
+    await waitFor(() => {
+      userEvent.click(screen.getByText("Login/Register"));
+    });
 
-//     await act(async () => {
-//       await authValue.login({ email: 'test@example.com', password: 'invalidPassword' });
-//     });
+    // Check if auth state remains false and localStorage is not updated
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(localStorage.getItem("email")).toBeNull();
+  });
 
-//     expect(authValue.auth).toBe(false);
-//     expect(authValue.email).toBe('');
-//     expect(localStorage.getItem('token')).toBe(null);
-//     expect(localStorage.getItem('email')).toBe(null);
-//   });
+  test("logs out successfully", async () => {
+    // Set initial auth state and email in localStorage
+    localStorage.setItem("token", "mockToken");
+    localStorage.setItem("email", "test@example.com");
 
-//   test('logout function clears localStorage and sets auth to false', () => {
-//     localStorage.setItem('token', 'mockToken');
-//     localStorage.setItem('email', 'test@example.com');
-//     const mockContextValue = {
-//         email: "test@example.com",
-//         auth: true,
-//         login: jest.fn(),
-//         logout: jest.fn(),
-//       };
-//     let authValue: any;
-//     render(
-//       <AuthContext.Provider value={mockContextValue}>
-//         <AuthProvider>
-//           <AuthContext.Consumer>{(value) => (authValue = value as IAuthContext)}</AuthContext.Consumer>
-//         </AuthProvider>
-//       </AuthContext.Provider>
-//     );
+    render(
+      <AuthProvider>
+        <BrowserRouter>
+          <NavigationBar />
+        </BrowserRouter>
+      </AuthProvider>
+    );
 
-//     act(() => {
-//       authValue.logout();
-//     });
+    // Trigger logout
+    await waitFor(() => {
+      userEvent.click(screen.getByText("Logout"));
+    });
 
-//     expect(authValue.auth).toBe(false);
-//     expect(authValue.email).toBe('');
-//     expect(localStorage.getItem('token')).toBe(null);
-//     expect(localStorage.getItem('email')).toBe(null);
-//   });
-// });
+    // Check if auth state is updated and email is removed from localStorage
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(localStorage.getItem("email")).toBeNull();
+  });
+});

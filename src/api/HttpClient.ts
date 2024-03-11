@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 import { BaseConfig } from "config/axios";
 
-export abstract class HTTPClient {
+export class HTTPClient {
   protected instance: AxiosInstance;
   protected config: AxiosRequestConfig;
 
@@ -14,7 +14,7 @@ export abstract class HTTPClient {
     this.config = config;
   }
 
-  protected createInstance(): AxiosInstance {
+  createInstance(): AxiosInstance {
     this.instance = axios.create(this.config);
     this.initializeResponseInterceptor();
     return this.instance;
@@ -34,11 +34,11 @@ export abstract class HTTPClient {
     });
   }
 
-  private handleResponse(response: AxiosResponse) {
+  handleResponse(response: AxiosResponse) {
     return response;
   }
 
-  private handleError(error: any) {
+  handleError(error: any) {
     return Promise.reject(error);
   }
 }

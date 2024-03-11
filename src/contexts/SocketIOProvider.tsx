@@ -11,21 +11,18 @@ interface SocketProviderChildren {
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
-export const useSocket = (): SocketContextType => {
+export const useSocket = (): SocketContextType | undefined => {
   const context = useContext(SocketContext);
-  if (!context) {
-    throw new Error("useSocket must be used within a SocketProvider");
-  }
+
   return context;
 };
 
 export const SocketProvider: React.FC<SocketProviderChildren> = ({
   children,
 }) => {
-  const socket = io(
-    process.env.REACT_APP_BACKEND_URL || "http://localhost:5000",
-    { transports: ["websocket"] }
-  );
+  const socket = io(process.env.REACT_APP_BACKEND_URL!, {
+    transports: ["websocket"],
+  });
 
   return (
     <SocketContext.Provider value={{ socket }}>
