@@ -94,6 +94,7 @@ const NavigationBar = () => {
             <>
               <Typography>Welcome user {authedEmail}</Typography>
               <Button
+                data-cy="share"
                 sx={{ ml: 2 }}
                 color="info"
                 variant="contained"
@@ -106,6 +107,7 @@ const NavigationBar = () => {
             <>
               <BoxWrapper>
                 <StyledInputBase
+                  type="text"
                   value={email}
                   onChange={handleChangeEmail}
                   placeholder="Email"

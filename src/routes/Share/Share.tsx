@@ -87,6 +87,7 @@ const ShareLinkBox = () => {
           />
           <Box sx={{ display: "flex" }}>
             <Button
+              data-cy="share-button"
               variant="contained"
               type="submit"
               sx={{ marginTop: "10px", width: "70px", marginRight: "10px" }}
