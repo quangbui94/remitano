@@ -5,6 +5,7 @@ import reportWebVitals from "reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "contexts/AuthProvider";
 import { SocketProvider } from "contexts/SocketIOProvider";
+// import { ThemeProvider } from "styled-components";
 
 import "index.css";
 

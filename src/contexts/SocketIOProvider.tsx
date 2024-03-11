@@ -9,12 +9,12 @@ interface SocketProviderChildren {
   children: React.ReactNode;
 }
 
-const SocketContext = createContext<SocketContextType | undefined>(undefined);
+const SocketContext = createContext<SocketContextType>({ socket: io() });
 
-export const useSocket = (): SocketContextType | undefined => {
+export const useSocket = (): SocketContextType => {
   const context = useContext(SocketContext);
 
-  return context;
+  return context!;
 };
 
 export const SocketProvider: React.FC<SocketProviderChildren> = ({

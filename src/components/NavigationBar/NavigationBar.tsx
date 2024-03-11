@@ -114,6 +114,7 @@ const NavigationBar = () => {
               </BoxWrapper>
               <BoxWrapper>
                 <StyledInputBase
+                  type="password"
                   value={password}
                   onChange={handleChangePassword}
                   placeholder="Password"

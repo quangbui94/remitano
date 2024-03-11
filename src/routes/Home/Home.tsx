@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import VideoCard from "components/VideoCard/VideoCard";
 import { VideoRequest, IVideoResponse } from "api/VideoRequest";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const Home = () => {
   const [videoCollection, setVideoCollection] = useState<IVideoResponse[]>([]);
+  const theme = useTheme();
+  const isMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
 
   useEffect(() => {
     const getAllVideos = async (): Promise<void> => {
@@ -16,7 +20,16 @@ const Home = () => {
   }, []);
 
   return (
-    <Box data-testid="home" style={{ padding: "100px 350px" }}>
+    <Box
+      data-testid="home"
+      style={{
+        padding: isMedium
+          ? "50px 20px"
+          : isLarge
+          ? "100px 350px"
+          : "100px 500px",
+      }}
+    >
       {videoCollection.map((video, i) => (
         <VideoCard
           key={i}

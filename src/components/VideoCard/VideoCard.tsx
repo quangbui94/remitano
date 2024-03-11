@@ -1,6 +1,13 @@
 import React from "react";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { trimArray } from "utils";
+import { useTheme } from "@mui/material/styles";
 
 interface VideoCardProps {
   embedId: string;
@@ -15,6 +22,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
   owner,
   description,
 }) => {
+  const theme = useTheme();
+  const isMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
+
   return (
     <Card sx={{ display: "flex", mb: 5 }} data-testid="video-card">
       <CardMedia
