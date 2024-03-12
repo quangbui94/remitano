@@ -27,7 +27,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (item: IRequestBody): Promise<any> => {
-    console.log("hi");
     const auth = new AuthRequest();
     try {
       const {

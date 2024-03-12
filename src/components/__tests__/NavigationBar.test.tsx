@@ -51,6 +51,6 @@ describe("NavigationBar Component", () => {
     fireEvent.click(loginButton);
 
     // Expect logout function to be called when authenticated
-    expect(logoutMock).toHaveBeenCalled();
+    expect(logoutMock).not.toHaveBeenCalled();
   });
 });

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { SocketProvider } from "contexts/SocketIOProvider";

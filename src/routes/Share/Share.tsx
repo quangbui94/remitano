@@ -38,7 +38,6 @@ const ShareLinkBox = () => {
         return;
       }
     } catch (error: any) {
-      console.log("failed");
       if (!error.response.data.success) {
         setError(true);
         setErrorMessage(error.response.data.message);
