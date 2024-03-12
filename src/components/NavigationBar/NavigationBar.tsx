@@ -7,6 +7,7 @@ import {
   InputBase,
   IconButton,
   Button,
+  Snackbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -46,6 +47,7 @@ const NavigationBar = () => {
   const { auth, login, logout, email: authedEmail } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -57,17 +59,20 @@ const NavigationBar = () => {
 
   const onLoginHandler = async () => {
     try {
-      console.log(auth);
-      auth ? logout() : login({ email, password });
+      const result = auth ? await logout() : await login({ email, password });
       setEmail("");
       setPassword("");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setError("Invalid incredentials");
     }
   };
 
   const onShareHandler = () => {
     navigate("/share");
+  };
+
+  const handleNotificationClose = () => {
+    setError("");
   };
 
   return (
@@ -132,6 +137,13 @@ const NavigationBar = () => {
           </BoxWrapper>
         </Toolbar>
       </AppBar>
+      <Snackbar
+        data-testid="notification"
+        open={!!error}
+        autoHideDuration={5000}
+        onClose={handleNotificationClose}
+        message={error}
+      />
     </Box>
   );
 };

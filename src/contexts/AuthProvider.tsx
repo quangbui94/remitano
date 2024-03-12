@@ -39,8 +39,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setEmail(email);
       }
     } catch (error) {
-      console.log(error);
       setAuth(false);
+      throw error;
     }
   };
 
