@@ -63,6 +63,7 @@ const NavigationBar = () => {
       setEmail("");
       setPassword("");
     } catch (error: any) {
+      console.log(error);
       setError("Invalid incredentials");
     }
   };

@@ -5,7 +5,7 @@ export const AuthConfig: AxiosRequestConfig = {
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 1000,
+  timeout: 5000,
 };
 
 export const VideoConfig: AxiosRequestConfig = {
@@ -21,5 +21,5 @@ export const BaseConfig: AxiosRequestConfig = {
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 1000,
+  timeout: 5000,
 };
